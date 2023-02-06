@@ -1,9 +1,53 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(MyNewGrammar)package OriginalGrammarPackage;
+ */
+options
+{
+  static = true;
+}
 
-public class MyNewGrammar{  public static void main(String args []) throws ParseException  {    MyNewGrammar parser = new MyNewGrammar(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        /*switch (MyNewGrammar.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }*/
-			SimpleNode n = parser.Start();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        MyNewGrammar.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}
+PARSER_BEGIN(MyNewGrammar)
+package OriginalGrammarPackage;
+
+public class MyNewGrammar
+{
+  public static void main(String args []) throws ParseException
+  {
+    MyNewGrammar parser = new MyNewGrammar(System.in);
+    while (true)
+    {
+      System.out.println("Reading from standard input...");
+      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
+      try
+      {
+        /*switch (MyNewGrammar.one_line())
+        {
+          case 0 : 
+          System.out.println("OK.");
+          break;
+          case 1 : 
+          System.out.println("Goodbye.");
+          break;
+          default : 
+          break;
+        }*/
+			SimpleNode n = parser.Start();
+      }
+      catch (Exception e)
+      {
+        System.out.println("NOK.");
+        System.out.println(e.getMessage());
+        MyNewGrammar.ReInit(System.in);
+      }
+      catch (Error e)
+      {
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
+        break;
+      }
+    }
+  }
+}
 
 PARSER_END(MyNewGrammar)
 
@@ -158,7 +202,8 @@ void variableDeclaration() :
 
 /*SimpleNode Start(): {}
 {
- (   varname()
+ (
+   varname()
   <EQ>
   rightOperand() ";"
 )* "!"
@@ -221,3 +266,59 @@ boolean bbase() :
 }
 
 /*BOOLEAN ARITHMETIC ENDS HERE*/
+
+
+/*FLOAT ARITHMETIC STATS HERE*/
+/*---------------------------------------------------------------------*/
+
+float floatStatement() :
+{
+{float a;}
+
+{
+  a = fterm()
+  ( "+"  a = fterm() )*
+  { return a;}
+}
+
+{float b;}
+
+{
+b=fterm()
+("-" b=Fterm() )*
+{return b;}
+}
+}
+
+float fterm() :
+{
+{float c;}
+{
+  c = fsubterm()
+  ( "*" c = fsubterm() )*
+  {return c;}
+}
+
+{float d;}
+{
+d=fsubterm()
+("/" d=fsubterm() )*
+}
+}
+
+float fsubterm() :
+{float e;}
+{
+  "-" e = fbase() {return !a;}
+}
+
+
+float fbase() :
+{float f;}
+{
+  (
+  "(" f=floatStatement() ")"
+  ){return f;}
+}
+
+/*FLOAT ARITHMETIC ENDS HERE*/
